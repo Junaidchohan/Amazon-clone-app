@@ -22,7 +22,9 @@ class CustomeTextfield extends StatelessWidget {
           borderSide: BorderSide(color: Colors.black38),
         ),
       ),
-      validator: (value) {},
+      validator: (value) {
+        return null;
+      },
     );
   }
 }

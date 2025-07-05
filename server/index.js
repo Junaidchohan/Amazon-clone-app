@@ -11,7 +11,7 @@ const authRouter = require("./routes/auth")
 
 const PORT = 3000;
 const app = express();
-const DB = "mongodb+srv://junaidchohanedu:@Junaidm0997@cluster0.a15ozse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const DB = "mongodb+srv://junaidchohanedu:Junaidm0997@cluster0.a15ozse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Middlewhere
 app.use(express.json());
