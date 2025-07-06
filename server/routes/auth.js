@@ -1,11 +1,12 @@
 const express = require("express");
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 
 const authRouter = express.Router();
 
-//  SIGN UP
+//  SIGN UP ROUTE
 authRouter.post("/api/signup", async (req, res) => {
     try{
  // Get the data from client
@@ -29,6 +30,34 @@ authRouter.post("/api/signup", async (req, res) => {
     }
    
 });
+
+//  SIGN IN ROUTE
+
+authRouter.post("aip/signin", async (req, res) => {
+    try{
+        // For email
+      const {email, password} = req.body;
+
+      const user = await User.findOne({email});
+      if(!user){
+        res.status(400).json({msg: "User with this email does not exist!" });
+      }
+
+    //   For password
+
+    const isMatch = await bcryptjs.compare(password, user.password);
+    if(!isMatch){
+        res.status(400).json({msg: "Incorrect password. " });
+
+    }
+
+    const token =   jwt.sign({id: user._id}, "passwordKey");
+    token.jsin({token, ...user._doc});
+
+    } catch (e){
+        res.status(500).json({error: e.message});
+    }
+})
 
 
 // Export use for make its file public so i can use this file anwhere else its by default private.
