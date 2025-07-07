@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 class User {
   final String id;
   final String name;
@@ -20,32 +17,39 @@ class User {
     required this.token,
   });
 
+  /// ✅ Converts Map to User
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['_id'] ?? '',
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      password: map['password'] ?? '',
+      address: map['address'] ?? '',
+      type: map['type'] ?? '',
+      token: map['token'] ?? '',
+    );
+  }
+
+  /// ✅ Converts User to Map
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
+    return {
+      '_id': id,
       'name': name,
       'email': email,
       'password': password,
       'address': address,
       'type': type,
-      'tokan': token,
+      'token': token,
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
-      id: map['_id'] as String,
-      name: map['name'] as String,
-      email: map['email'] as String,
-      password: map['password'] as String,
-      address: map['address'] as String,
-      type: map['type'] as String,
-      token: map['tokan'] as String,
-    );
+  /// ✅ Fix: Add fromJson method
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User.fromMap(json);
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory User.fromJson(String source) =>
-      User.fromMap(json.decode(source) as Map<String, dynamic>);
+  /// Optional: toJson method for saving to local storage etc.
+  Map<String, dynamic> toJson() {
+    return toMap();
+  }
 }

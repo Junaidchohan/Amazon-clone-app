@@ -34,10 +34,17 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void signUpUser() {
-    // print (user.toJson());
     authService.signUpUser(
       context: context,
       name: _nameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+  }
+
+  void signInUser() {
+    authService.signInUser(
+      context: context,
       email: _emailController.text,
       password: _passwordController.text,
     );
@@ -154,7 +161,14 @@ class _AuthScreenState extends State<AuthScreen> {
                           hintText: 'Password',
                         ),
                         SizedBox(height: 10),
-                        CustomButton(text: "Sign In", onTap: () {}),
+                        CustomButton(
+                          text: "Sign In",
+                          onTap: () {
+                            if (_signInFormKey.currentState!.validate()) {
+                              signInUser();
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),

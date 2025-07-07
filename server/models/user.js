@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function (value) {
-        return 
-  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  // /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       },
       message: "Invalid email format"
     }
