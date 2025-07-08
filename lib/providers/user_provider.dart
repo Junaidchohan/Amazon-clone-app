@@ -16,9 +16,21 @@ class UserProvider extends ChangeNotifier {
 
   User get user => _user;
 
+  // void setUser(String user) {
+  //   final userMap = jsonDecode(user); // decode JSON string to Map
+  //   _user = User.fromJson(userMap);
+  //    // create User from Map
+  //   notifyListeners();
+  // }
+
   void setUser(String user) {
-    final userMap = jsonDecode(user); // decode JSON string to Map
-    _user = User.fromJson(userMap); // create User from Map
-    notifyListeners();
+    try {
+      final userMap = jsonDecode(user);
+      _user = User.fromJson(userMap);
+      // print("User loaded: $_user"); // ✅ Debug
+      notifyListeners();
+    } catch (e) {
+      // print("Failed to load user: $e"); // 🔥 Catch the real error
+    }
   }
 }

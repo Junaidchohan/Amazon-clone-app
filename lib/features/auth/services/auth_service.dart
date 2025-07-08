@@ -38,20 +38,24 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+      // Avoid direct context usage after async
 
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          showSnackBar(
-            context,
-            'Account created! Login with the same credentials',
-          );
-        },
-      );
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(
+              context,
+              'Account created! Login with the same credentials',
+            );
+          },
+        );
+      }
     } catch (e) {
-      // print('Error: $e');
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 
@@ -70,23 +74,75 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+      // Avoid direct context usage after async
 
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-          await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            HomeScreen.routName,
-            (route) => false,
-          );
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            if (!context.mounted) return;
+            Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+            await prefs.setString(
+              'x-auth-token',
+              jsonDecode(res.body)['token'],
+            );
+            if (!context.mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              HomeScreen.routName,
+              (route) => false,
+            );
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  // Get User Data
+  Future<void> getUserData(BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+      if (token == null) {
+        prefs.setString('x-auth-token', '');
+      }
+
+      var tokenRes = await http.post(
+        Uri.parse('$uri/tokenIsValid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
         },
       );
+
+      var responce = jsonDecode(tokenRes.body);
+      if (responce == true) {
+        // get the user data
+        http.Response userRes = await http.get(
+          Uri.parse('$uri/api/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          },
+        );
+
+        if (context.mounted) {
+          Provider.of<UserProvider>(
+            context,
+            listen: false,
+          ).setUser(userRes.body);
+        }
+      }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 }
