@@ -1,6 +1,7 @@
 // this file is working for connect frontend and backend
 import 'dart:convert';
 
+import 'package:amazon_clone_app/common/widgets/bottom_bar.dart';
 import 'package:amazon_clone_app/constants/error_handling.dart';
 import 'package:amazon_clone_app/constants/global_variables.dart';
 import 'package:amazon_clone_app/constants/utils.dart';
@@ -91,7 +92,7 @@ class AuthService {
             if (!context.mounted) return;
             Navigator.pushNamedAndRemoveUntil(
               context,
-              HomeScreen.routName,
+              BottomBar.routName,
               (route) => false,
             );
           },

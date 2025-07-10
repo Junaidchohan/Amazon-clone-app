@@ -1,97 +1,50 @@
-import 'dart:convert';
+import 'package:amazon_clone_app/common/widgets/bottom_bar.dart';
+import 'package:amazon_clone_app/constants/global_variables.dart';
+import 'package:amazon_clone_app/features/auth/screens/auth_screen.dart';
+import 'package:amazon_clone_app/features/auth/services/auth_service.dart';
+import 'package:amazon_clone_app/providers/user_provider.dart';
+import 'package:amazon_clone_app/router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-
-import 'constants/global_variables.dart';
-import 'features/auth/screens/auth_screen.dart';
-import 'features/home/screens/home_screen.dart';
-import 'providers/user_provider.dart';
-import 'router.dart';
 
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+      providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
       child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Widget _startScreen = const Scaffold(
-    body: Center(child: CircularProgressIndicator()),
-  );
+  final AuthService authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _initializeUser();
-  }
-
-  Future<void> _initializeUser() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token') ?? '';
-      if (token.isEmpty) {
-        await prefs.setString('x-auth-token', '');
-      }
-
-      final tokenRes = await http.post(
-        Uri.parse('$uri/tokenIsValid'),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token,
-        },
-      );
-
-      final isValid = jsonDecode(tokenRes.body);
-
-      if (isValid) {
-        final userRes = await http.get(
-          Uri.parse('$uri/api/user'),
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'x-auth-token': token,
-          },
-        );
-
-        if (!mounted) return;
-        Provider.of<UserProvider>(context, listen: false).setUser(userRes.body);
-        setState(() {
-          _startScreen = const HomeScreen();
-        });
-        return;
-      }
-    } catch (e) {
-      // Optional: print(e.toString());
-    }
-
-    if (!mounted) return;
-    setState(() {
-      _startScreen = const AuthScreen();
-    });
+    authService.getUserData(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Amazon Clone',
       theme: ThemeData(
         scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-        colorScheme: ColorScheme.light(primary: GlobalVariables.secondaryColor),
+        colorScheme: const ColorScheme.light(
+          primary: GlobalVariables.secondaryColor,
+        ),
         appBarTheme: const AppBarTheme(
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: GlobalVariables.secondaryColor,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -99,9 +52,14 @@ class _MyAppState extends State<MyApp> {
             foregroundColor: Colors.white,
           ),
         ),
+        useMaterial3: true, // can remove this line
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: _startScreen,
+      home:
+          Provider.of<UserProvider>(context).user.token.isNotEmpty
+              ? const AuthScreen()
+              // : const AdminScreen()
+              : const BottomBar(),
     );
   }
 }
