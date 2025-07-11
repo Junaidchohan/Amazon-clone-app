@@ -10,11 +10,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => AuthScreen(),
       );
-    // case HomeScreen.routName:
-    //   return MaterialPageRoute(
-    //     settings: routeSettings,
-    //     builder: (_) => HomeScreen(),
-    //   );
+    case HomeScreen.routName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => HomeScreen(),
+      );
     case BottomBar.routName:
       return MaterialPageRoute(
         settings: routeSettings,

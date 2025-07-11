@@ -29,7 +29,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      authService.getUserData(context);
+    });
   }
 
   @override
@@ -55,6 +57,10 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true, // can remove this line
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
+      builder: (context, child) {
+        // Now this context is a descendant of MaterialApp (hence has ScaffoldMessenger)
+        return child!;
+      },
       home:
           Provider.of<UserProvider>(context).user.token.isNotEmpty
               ? const AuthScreen()
