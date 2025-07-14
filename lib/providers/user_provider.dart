@@ -6,7 +6,7 @@ import 'package:amazon_clone_app/models/user.dart';
 class UserProvider extends ChangeNotifier {
   User _user = User(
     id: '',
-    name: '',
+    name: 'Junaid',
     email: '',
     password: '',
     address: '',
@@ -30,7 +30,7 @@ class UserProvider extends ChangeNotifier {
       // print("User loaded: $_user"); // ✅ Debug
       notifyListeners();
     } catch (e) {
-      print("Failed to load user: $e"); // 🔥 Catch the real error
+      // print("Failed to load user: $e"); // 🔥 Catch the real error
     }
   }
 }
