@@ -4,15 +4,15 @@ const auth = async (req, res, next) => {
 try{
 
     const token = req.header('x-auth-token');
-    if(!token) 
+    if(!token)
         return res.status(401).json({msg: 'No auth token, access denied.'});
-    
+
     const verified = jwt.verify(token, 'passwordKey');
         if(!verified) return res.status(401).json({msg: 'Token verification failed, authorization devied.'});
 
-        req.user = vaified.id; 
+        req.user = verified.id;
         req.token = token;
-        next(); 
+        next();
 
 }catch(e){
     res.status(500).json({error: e.message});

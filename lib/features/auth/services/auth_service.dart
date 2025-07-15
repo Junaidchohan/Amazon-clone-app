@@ -133,16 +133,20 @@ class AuthService {
         );
 
         if (context.mounted) {
+          final userMap = jsonDecode(
+            userRes.body,
+          ); // Convert JSON string to map
+          userMap['token'] = token; // Inject token into user map
+
           Provider.of<UserProvider>(
             context,
             listen: false,
-          ).setUser(userRes.body);
+          ).setUser(jsonEncode(userMap)); // Encode back to JSON string
         }
       }
     } catch (e) {
-      if (context.mounted) {
-        showSnackBar(context, e.toString());
-      }
+      debugPrint("Error in getUserData(): $e"); // Log it instead
+      // Don't use showSnackBar here; context not ready in main.dart
     }
   }
 }
