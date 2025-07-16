@@ -11,7 +11,9 @@ class CustomButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
-      ).merge(Theme.of(context).elevatedButtonTheme.style),
+        backgroundColor: Color.fromRGBO(255, 153, 0, 1), // button color
+        foregroundColor: Colors.white, // text/icon color
+      ),
       child: Text(text),
     );
   }

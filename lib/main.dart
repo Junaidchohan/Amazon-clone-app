@@ -4,6 +4,7 @@ import 'package:amazon_clone_app/features/admin/screens/admin_screen.dart';
 import 'package:amazon_clone_app/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone_app/features/auth/services/auth_service.dart';
 import 'package:amazon_clone_app/providers/user_provider.dart';
+import 'package:amazon_clone_app/router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -56,6 +57,7 @@ class _MyAppState extends State<MyApp> {
         ),
         useMaterial3: true,
       ),
+      onGenerateRoute: generateRoute,
       home:
           !_isUserLoaded
               ? const Scaffold(body: Center(child: CircularProgressIndicator()))
