@@ -4,9 +4,11 @@ import 'package:amazon_clone_app/common/widgets/custom_button.dart';
 import 'package:amazon_clone_app/common/widgets/custome_textfield.dart';
 import 'package:amazon_clone_app/constants/global_variables.dart';
 import 'package:amazon_clone_app/constants/utils.dart';
+import 'package:amazon_clone_app/features/admin/services/admin_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routName = '/add-product';
@@ -22,8 +24,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
 
+  final AdminServices adminServices = AdminServices();
+
   String category = 'Mobiles';
   List<File> images = [];
+  final _addProductFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -42,11 +47,33 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Fashion',
   ];
 
+  void sellProducts() {
+    if (_addProductFormKey.currentState!.validate() && images.isNotEmpty) {
+      adminServices.sellProducts(
+        context: context,
+        name: productNameController.text,
+        description: descriptionController.text,
+        price: double.parse(priceController.text),
+        quantity: double.parse(quantityController.text),
+        category: category,
+        images: images,
+      );
+    } else {
+      showSnackBar(context, "Please fill all fields and select images.");
+    }
+  }
+
   void selectImages() async {
-    var res = await pickImages();
-    setState(() {
-      images = res;
-    });
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        images = result.paths.map((path) => File(path!)).toList();
+      });
+    }
   }
 
   @override
@@ -65,6 +92,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _addProductFormKey,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Column(
@@ -164,7 +192,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 SizedBox(height: 10),
-                CustomButton(text: "Sell", onTap: () {}),
+                CustomButton(text: "Sell", onTap: sellProducts),
               ],
             ),
           ),
