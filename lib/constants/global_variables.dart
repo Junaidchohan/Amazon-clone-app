@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // const String uri = 'http://10.0.2.2:3000';
-const String uri = 'http://10.8.24.48:3000'; // Physically device
+const String uri = 'http://10.8.144.70:3000'; // Physically device
 // const String uri = 'http://localhost:3000'; // For Chrome on same PC
 
 class GlobalVariables {
