@@ -9,6 +9,7 @@ const cors = require('cors');
 
 const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
+const productRouter = require("./routes/product");
 
 // Initilize the express
 
@@ -27,6 +28,8 @@ app.use(cors({
 app.use(express.json());
 app.use(authRouter);
 app.use('/admin', adminRouter);
+app.use(productRouter);
+
 // app.use(authRouter);
 
 // Connection to the database
