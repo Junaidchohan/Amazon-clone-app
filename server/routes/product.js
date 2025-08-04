@@ -5,7 +5,7 @@ const Product = require("../models/product");
 
 
 //  Get all the products
-productRouter.get("/api/products/", auth, async (req, res) => {
+productRouter.get("/", auth, async (req, res) => {
   try {
     const products = await Product.find({ category: req.query.category });
     res.json(products);

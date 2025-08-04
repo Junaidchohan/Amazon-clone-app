@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
+  final Color? color;
   final String text;
   final VoidCallback onTap;
-  const CustomButton({super.key, required this.text, required this.onTap});
+  const CustomButton({
+    super.key,
+    required this.text,
+    required this.onTap,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,10 @@ class CustomButton extends StatelessWidget {
         backgroundColor: Color.fromRGBO(255, 153, 0, 1), // button color
         foregroundColor: Colors.white, // text/icon color
       ),
-      child: Text(text),
+      child: Text(
+        text,
+        style: TextStyle(color: color == null ? Colors.white : Colors.black),
+      ),
     );
   }
 }

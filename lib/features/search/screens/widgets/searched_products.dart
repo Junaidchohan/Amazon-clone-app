@@ -13,8 +13,9 @@ class SearchedProducts extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 product.images[0],
@@ -22,49 +23,34 @@ class SearchedProducts extends StatelessWidget {
                 height: 135,
                 width: 135,
               ),
-              Column(
-                children: [
-                  Container(
-                    width: 235,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
+              const SizedBox(width: 10),
+              // Replace fixed width Column with Flexible
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       product.name,
                       style: TextStyle(fontSize: 16),
                       maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Container(
-                    width: 235,
-                    padding: EdgeInsets.only(left: 10, top: 5),
-                    child: Stars(rating: 4),
-                  ),
-                  Container(
-                    width: 235,
-                    padding: EdgeInsets.only(left: 10, top: 5),
-                    child: Text(
+                    const SizedBox(height: 5),
+                    Stars(rating: 4),
+                    const SizedBox(height: 5),
+                    Text(
                       '\$${product.price}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
-                      maxLines: 2,
                     ),
-                  ),
-                  Container(
-                    width: 235,
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text("Eligible for FREE Shipping "),
-                  ),
-                  Container(
-                    width: 235,
-                    padding: EdgeInsets.only(left: 10, top: 5),
-                    child: Text(
-                      'In Stock',
-                      style: TextStyle(color: Colors.teal),
-                      maxLines: 2,
-                    ),
-                  ),
-                ],
+                    const SizedBox(height: 5),
+                    Text("Eligible for FREE Shipping"),
+                    const SizedBox(height: 5),
+                    Text('In Stock', style: TextStyle(color: Colors.teal)),
+                  ],
+                ),
               ),
             ],
           ),
