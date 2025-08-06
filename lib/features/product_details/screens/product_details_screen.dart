@@ -1,6 +1,7 @@
 import 'package:amazon_clone_app/common/widgets/custom_button.dart';
 import 'package:amazon_clone_app/common/widgets/stars.dart';
 import 'package:amazon_clone_app/constants/global_variables.dart';
+import 'package:amazon_clone_app/features/product_details/services/product_details_services.dart';
 import 'package:amazon_clone_app/features/search/screens/search_screen.dart';
 import 'package:amazon_clone_app/models/product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,6 +18,9 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final ProductDetailsServices productDetailsServices =
+      ProductDetailsServices();
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routName, arguments: query);
   }
@@ -173,7 +177,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               itemBuilder:
                   (context, _) =>
                       Icon(Icons.star, color: GlobalVariables.secondaryColor),
-              onRatingUpdate: (rating) {},
+              onRatingUpdate: (rating) {
+                productDetailsServices.rateProduct(
+                  context: context,
+                  product: widget.product,
+                  rating: rating,
+                );
+              },
             ),
           ],
         ),
