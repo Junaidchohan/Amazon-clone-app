@@ -10,6 +10,15 @@ class SearchedProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double totalRating = 0;
+    for (int i = 0; i < product.rating!.length; i++) {
+      totalRating += product.rating![i].rating;
+    }
+    double avgRating = 0;
+    if (totalRating != 0) {
+      avgRating = totalRating / product.rating!.length;
+    }
+
     return Column(
       children: [
         Container(
@@ -36,7 +45,7 @@ class SearchedProducts extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5),
-                    Stars(rating: 4),
+                    Stars(rating: avgRating),
                     const SizedBox(height: 5),
                     Text(
                       '\$${product.price}',
