@@ -1,5 +1,5 @@
 const express = require("express");
-const Product = require("../models/product"); // adjust the path if needed
+const {Product} = require("../models/product"); // adjust the path if needed
 const adminRouter = express.Router();
 
 

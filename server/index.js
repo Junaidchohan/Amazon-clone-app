@@ -10,6 +10,7 @@ const cors = require('cors');
 const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
 const productRouter = require("./routes/product");
+const userRouter = require("./routes/user");
 
 // Initilize the express
 
@@ -29,6 +30,8 @@ app.use(express.json());
 app.use(authRouter);
 app.use('/admin', adminRouter);
 app.use("/api/products", productRouter);
+app.use(userRouter);
+
 
 // app.use(authRouter);
 
